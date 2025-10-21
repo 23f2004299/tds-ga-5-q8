@@ -17,6 +17,11 @@ jobs:
   daily_commit_job:
     runs-on: ubuntu-latest
     
+    # Add write permissions for the contents of the repository
+    # This is necessary for the action to be able to push a commit.
+    permissions:
+      contents: write
+      
     steps:
       # Step 1: Check out the repository's code so the workflow can access it.
       - name: Checkout repository
@@ -42,3 +47,4 @@ jobs:
       - name: Push the commit
         run: |
           git push
+
