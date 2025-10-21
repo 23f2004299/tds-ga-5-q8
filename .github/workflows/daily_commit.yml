@@ -1,0 +1,44 @@
+# This is a GitHub Actions workflow that runs on a schedule.
+# It creates an empty commit every day to keep the repository active.
+
+name: Daily Commit Action
+
+on:
+  # Schedule to run once per day at 2:00 AM UTC.
+  # The syntax is based on cron jobs.
+  schedule:
+    - cron: '0 2 * * *'
+  
+  # This allows you to run the workflow manually from the Actions tab
+  # on GitHub, which is useful for testing.
+  workflow_dispatch:
+
+jobs:
+  daily_commit_job:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: Check out the repository's code so the workflow can access it.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # We need to fetch the full history to push commits back.
+          fetch-depth: 0
+
+      # Step 2: Configure Git with a user name and the required email.
+      # This step is named with your specific email as requested.
+      - name: Configure Git for 23f2004299@ds.study.iitm.ac.in
+        run: |
+          git config --global user.name 'GitHub Actions Bot'
+          git config --global user.email 'github-actions-bot@users.noreply.github.com'
+
+      # Step 3: Create an empty commit.
+      # The --allow-empty flag is used so that you don't need to change any files.
+      - name: Create a new commit
+        run: |
+          git commit --allow-empty -m "feat: Automated daily commit"
+
+      # Step 4: Push the new commit back to the main branch of the repository.
+      - name: Push the commit
+        run: |
+          git push
